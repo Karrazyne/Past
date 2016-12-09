@@ -10,6 +10,7 @@ using Past.Protocol.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Past.Game.Helper;
 using Past.Protocol.Messages;
 
 namespace Past.Game.Engine
