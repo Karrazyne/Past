@@ -10,11 +10,15 @@ using Past.Protocol.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Past.Protocol.Messages;
 
 namespace Past.Game.Engine
 {
     public class CharacterEngine
     {
+        public GuildEngine Guild{ get; set; }
+        public int GuildRank { get; set; }
+        
         private CharacterRecord Record
         {
             get;
@@ -95,7 +99,8 @@ namespace Past.Game.Engine
             }
         }
 
-        public EntityLook EntityLook => Functions.BuildEntityLook(EntityLookString);
+        public EntityLook EntityLook
+            => /*Functions.BuildEntityLook(EntityLookString);*/ GeneralHelper.BuildEntityLook(EntityLookString, Record);
 
         public bool Sex
         {
@@ -433,22 +438,20 @@ namespace Past.Game.Engine
 
         public void LevelUp()
         {
-            if (Level != 200)
+            if (Level == 200) return;
+            Level++;
+            Health = MaxHealth;
+            StatsPoints += 5;
+            SpellsPoints += 1;
+            Experience = ExperienceLevelFloor;
+            if (GetNextSpell(Level) != 0)
             {
-                Level++;
-                Health = MaxHealth;
-                StatsPoints += 5;
-                SpellsPoints += 1;
-                Experience = ExperienceLevelFloor;
-                if (GetNextSpell(Level) != 0)
-                {
-                    Spells.Add(new CharacterSpellRecord(Id, (byte)(Spells.LastOrDefault().Position + 1), GetNextSpell(Level), 1));
-                }
-                CharacterHandler.SendCharacterLevelUpMessage(Client, Level);
-                CurrentMap.SendCharacterLevelUpInformation(Client);
-                CharacterHandler.SendCharacterStatsListMessage(Client);
-                InventoryHandler.SendSpellListMessage(Client);
+                Spells.Add(new CharacterSpellRecord(Id, (byte)(Spells.LastOrDefault().Position + 1), GetNextSpell(Level), 1));
             }
+            CharacterHandler.SendCharacterLevelUpMessage(Client, Level);
+            CurrentMap.SendCharacterLevelUpInformation(Client);
+            CharacterHandler.SendCharacterStatsListMessage(Client);
+            InventoryHandler.SendSpellListMessage(Client);
         }
 
         private int GetNextSpell(byte level)
@@ -478,7 +481,56 @@ namespace Past.Game.Engine
             return spell;
         }
 
-        public GameRolePlayCharacterInformations GetGameRolePlayCharacterInformations => new GameRolePlayCharacterInformations(Id, EntityLook, Disposition, Name, new HumanInformations(new EntityLook[0], 0, 0, new ActorRestrictionsInformations(false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, true, false, false, false, false, false), 0), GetActorAlignmentInformations);
+        public void UpdateStats()
+        {
+            Health = Stats.Total(StatEnum.VITALITY);
+
+            Wisdom = Stats.Total(StatEnum.WISDOM);
+            Intelligence = Stats.Total(StatEnum.INTELLIGENCE);
+            Strength = Stats.Total(StatEnum.STRENGTH);
+            Chance = Stats.Total(StatEnum.CHANCE);
+            Agility = Stats.Total(StatEnum.AGILITY);
+        }
+
+        //public GameRolePlayCharacterInformations GetGameRolePlayCharacterInformations => new GameRolePlayCharacterInformations(Id, EntityLook, Disposition, Name, new HumanInformations(new EntityLook[0], 0, 0, new ActorRestrictionsInformations(false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, true, false, false, false, false, false), 0), GetActorAlignmentInformations);
+        public GameRolePlayCharacterInformations GetGameRolePlayCharacterInformations()
+        {
+            GameRolePlayCharacterInformations result;
+            if (Guild != null)
+            {
+                result = new GameRolePlayCharacterInformations()
+                {
+                    name = Name,
+                    alignmentInfos = GetActorAlignmentInformations,
+                    contextualId = Id,
+                    disposition = Disposition,
+                    humanoidInfo = GetHumanWithGuildInformations,
+                    look = EntityLook
+                };
+            }
+            else
+            {
+                result = new GameRolePlayCharacterInformations()
+                {
+                    name = Name,
+                    alignmentInfos = GetActorAlignmentInformations,
+                    contextualId = Id,
+                    disposition = Disposition,
+                    humanoidInfo = GetHumanInformations,
+                    look = EntityLook
+                };
+            }
+
+            return result;
+        }
+
+        public HumanInformations GetHumanInformations => new HumanInformations(new EntityLook[0], 0, 0,
+            new ActorRestrictionsInformations(false, false, false, false, false, false, false, false, true, false,
+                false, false, false, true, true, true, false, false, false, false, false), 0);
+
+        public HumanWithGuildInformations GetHumanWithGuildInformations => new HumanWithGuildInformations(new EntityLook[0], 0, 0, new ActorRestrictionsInformations(false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, true, false, false, false, false, false), 0, new GuildInformations(Guild.Name, Guild.GuildEmblems));
+
+       // public GameRolePlayCharacterInformations GetGameRolePlayCharacterInformations => new GameRolePlayCharacterInformations(Id, EntityLook, Disposition, Name, new HumanInformations(new EntityLook[0], 0, 0, new ActorRestrictionsInformations(false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, true, false, false, false, false, false), 0), GetActorAlignmentInformations);
 
         public CharacterBaseInformations GetCharacterBaseInformations => new CharacterBaseInformations(Id, Name, Level, EntityLook, (sbyte)Breed, Sex);
 

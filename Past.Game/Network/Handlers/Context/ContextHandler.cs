@@ -20,6 +20,7 @@ namespace Past.Game.Network.Handlers.Context
             client.Character.CellId = (short)(message.keyMovements.Last() & 4095);
             client.Character.Direction = (DirectionsEnum)(message.keyMovements.Last() >> 12);
             client.Character.CurrentMap.Send(new GameMapMovementMessage(client.Character.Id, message.keyMovements));
+            client.Character.CurrentMap.Send(new GameContextRefreshEntityLookMessage(client.Character.Id, client.Character.EntityLook));
         }
 
         public static void HandleGameMapMovementConfirmMessage(Client client, GameMapMovementConfirmMessage message)

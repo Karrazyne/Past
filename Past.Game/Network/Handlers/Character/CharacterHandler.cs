@@ -12,6 +12,7 @@ using Past.Protocol.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Past.Game.Helper;
 
 namespace Past.Game.Network.Handlers.Character
 {
@@ -97,7 +98,8 @@ namespace Past.Game.Network.Handlers.Character
             CharacterBaseInformations[] characterBaseInformations = new CharacterBaseInformations[client.Account.Characters.Count];
             for (int i = 0; i < client.Account.Characters.Count; i++)
             {
-                characterBaseInformations[i] = new CharacterBaseInformations(client.Account.Characters[i].Id, client.Account.Characters[i].Name, client.Account.Characters[i].Level, Functions.BuildEntityLook(client.Account.Characters[i].EntityLookString), (sbyte)client.Account.Characters[i].Breed, client.Account.Characters[i].Sex);
+                //characterBaseInformations[i] = new CharacterBaseInformations(client.Account.Characters[i].Id, client.Account.Characters[i].Name, client.Account.Characters[i].Level, Functions.BuildEntityLook(client.Account.Characters[i].EntityLookString), (sbyte)client.Account.Characters[i].Breed, client.Account.Characters[i].Sex);
+                characterBaseInformations[i] = new CharacterBaseInformations(client.Account.Characters[i].Id, client.Account.Characters[i].Name, client.Account.Characters[i].Level, /*Functions.BuildEntityLook(client.Account.Characters[i].EntityLookString)*/ GeneralHelper.BuildEntityLook(client.Account.Characters[i].EntityLookString, client.Account.Characters[i]), (sbyte)client.Account.Characters[i].Breed, client.Account.Characters[i].Sex);
             }
             client.Send(new CharactersListMessage(false, tutorial, characterBaseInformations));
         }

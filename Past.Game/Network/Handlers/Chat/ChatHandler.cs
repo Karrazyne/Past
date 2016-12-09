@@ -21,9 +21,10 @@ namespace Past.Game.Network.Handlers.Chat
                         }*/
                         break;
                     case (sbyte)ChatChannelsMultiEnum.CHANNEL_GUILD:
-                        /*if (client.Character.Guild != null)
+                        if (client.Character.Guild != null)
                         {
-                        }*/
+                            SendGuildServerMessage(client, message.channel, message.content, client.Character.Id, client.Character.Name, client.Character.Guild.Id);
+                        }
                         break;
                     case (sbyte)ChatChannelsMultiEnum.CHANNEL_ALIGN:
                         if (client.Character.AlignmentSide != AlignmentSideEnum.ALIGNMENT_NEUTRAL)
@@ -84,6 +85,15 @@ namespace Past.Game.Network.Handlers.Chat
         public static void SendEnabledChannelsMessage(Client client, sbyte[] channels)
         {
             client.Send(new EnabledChannelsMessage(channels, new sbyte[0]));
+        }
+
+        public static void SendGuildServerMessage(Client client, sbyte channel, string content, int senderId,
+            string senderName, int guildId)
+        {
+            if (string.IsNullOrEmpty(content) || !Enum.IsDefined(typeof(ChatChannelsMultiEnum), channel)) return;
+
+            foreach (var c in Server.Clients.Where(c => c.Character.Guild.Id == guildId))
+                c.Send(new ChatServerMessage(channel, content, Functions.ReturnUnixTimeStamp(DateTime.Now), "", senderId, senderName));
         }
     }
 }

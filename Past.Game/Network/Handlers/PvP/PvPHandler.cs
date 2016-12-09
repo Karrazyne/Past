@@ -13,7 +13,7 @@ namespace Past.Game.Network.Handlers.PvP
         public static void HandleSetEnablePVPRequestMessage(Client client, SetEnablePVPRequestMessage message)
         {
             client.Character.PvPEnabled = message.enable;
-            client.Character.CurrentMap.Send(new GameRolePlayShowActorMessage(client.Character.GetGameRolePlayCharacterInformations));
+            client.Character.CurrentMap.Send(new GameRolePlayShowActorMessage(client.Character.GetGameRolePlayCharacterInformations()));
             if (!message.enable)
             {
                 client.Character.Honor -= (ushort)client.Character.PvPActivationCost;
