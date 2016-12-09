@@ -64,6 +64,7 @@
     <Compile Include="Network\Handlers\Context\ContextHandler.cs" />
     <Compile Include="Network\Handlers\Context\Roleplay\ContextRoleplayHandler.cs" />
     <Compile Include="Network\Handlers\Guild\GuildHandler.cs" />
+    <Compile Include="Network\Handlers\Interactive\InteractiveHandler.cs" />
     <Compile Include="Network\Handlers\Inventory\InventoryHandler.cs" />
     <Compile Include="Network\Handlers\PvP\PvPHandler.cs" />
     <Compile Include="Network\Server.cs" />

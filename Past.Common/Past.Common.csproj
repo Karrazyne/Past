@@ -52,6 +52,7 @@
     <Compile Include="Data\Breed.cs" />
     <Compile Include="Data\DataManager.cs" />
     <Compile Include="Data\Experience.cs" />
+    <Compile Include="Data\Interactive.cs" />
     <Compile Include="Data\Map.cs" />
     <Compile Include="Network\Client.cs" />
     <Compile Include="Network\Server.cs" />

@@ -3,26 +3,27 @@ using Past.Game.Network;
 using Past.Protocol;
 using Past.Protocol.Messages;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Past.Game.Engine
 {
     public class MapEngine
     {
-        private List<Client> Clients;
+        private readonly List<Client> _clients;
 
         public MapEngine()
         {
-            Clients = new List<Client>();
+            _clients = new List<Client>();
         }
 
         public void Send(NetworkMessage message)
         {
-            Clients.ForEach(client => client.Send(message));
+            _clients.ForEach(client => client.Send(message));
         }
 
         public void SendGameRolePlayShowActorMessage(Client client)
         {
-            foreach (Client _client in Clients)
+            foreach (var _client in _clients)
             {
                 client.Send(new GameRolePlayShowActorMessage(_client.Character.GetGameRolePlayCharacterInformations()));
             }
@@ -30,22 +31,19 @@ namespace Past.Game.Engine
 
         public void SendCharacterLevelUpInformation(Client client)
         {
-            foreach (Client _client in Clients)
+            foreach (var _client in _clients.Where(_client => _client != client))
             {
-                if (_client != client)
-                {
-                    Send(new CharacterLevelUpInformationMessage(client.Character.Level, client.Character.Name, client.Character.Id, 0));
-                }
+                Send(new CharacterLevelUpInformationMessage(client.Character.Level, client.Character.Name, client.Character.Id, 0));
             }
         }
 
         public void AddClient(Client client)
         {
-            lock (Clients)
+            lock (_clients)
             {
-                if (!Clients.Contains(client))
+                if (!_clients.Contains(client))
                 {
-                    Clients.Add(client);
+                    _clients.Add(client);
                     SendGameRolePlayShowActorMessage(client);
                     Send(new GameRolePlayShowActorMessage(client.Character.GetGameRolePlayCharacterInformations()));
                 }
@@ -54,11 +52,11 @@ namespace Past.Game.Engine
 
         public void RemoveClient(Client client)
         {
-            lock (Clients)
+            lock (_clients)
             {
-                if (Clients.Contains(client))
+                if (_clients.Contains(client))
                 {
-                    Clients.Remove(client);
+                    _clients.Remove(client);
                     Send(new GameContextRemoveElementMessage(client.Character.Id));
                 }
             }
@@ -66,7 +64,7 @@ namespace Past.Game.Engine
 
         public static void Initialize()
         {
-            foreach (Map map in Map.Maps.Values)
+            foreach (var map in Map.Maps.Values)
             {
                 map.Instance = new MapEngine();
             }

@@ -9,6 +9,10 @@ namespace Past.Game.Network.Handlers.Chat
 {
     public class ChatHandler
     {
+        public static void HandleAdminQuietCommandMessage(Client client, AdminQuietCommandMessage message)
+        {
+            ConsoleUtils.Write(ConsoleUtils.Type.INFO, message.content);
+        }
         public static void HandleChatClientMultiMessage(Client client, ChatClientMultiMessage message) //TODO
         {
             if (!message.content.StartsWith("."))
