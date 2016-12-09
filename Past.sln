@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Past.Protocol", "Past.Protocol\Past.Protocol.csproj", "{FD666F59-B2C2-41EA-8B6D-98977983B3AD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Past.Tools", "Past.Tools\Past.Tools.csproj", "{A94B7F6A-0CDD-45F3-A73D-BD30AA7D7D5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Past.Login", "Past.Login\Past.Login.csproj", "{24C40DD1-A05E-4EBD-8396-526359F36661}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -26,10 +24,6 @@ Global
 		{FD666F59-B2C2-41EA-8B6D-98977983B3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD666F59-B2C2-41EA-8B6D-98977983B3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD666F59-B2C2-41EA-8B6D-98977983B3AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A94B7F6A-0CDD-45F3-A73D-BD30AA7D7D5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A94B7F6A-0CDD-45F3-A73D-BD30AA7D7D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A94B7F6A-0CDD-45F3-A73D-BD30AA7D7D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A94B7F6A-0CDD-45F3-A73D-BD30AA7D7D5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{24C40DD1-A05E-4EBD-8396-526359F36661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24C40DD1-A05E-4EBD-8396-526359F36661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24C40DD1-A05E-4EBD-8396-526359F36661}.Release|Any CPU.ActiveCfg = Release|Any CPU
