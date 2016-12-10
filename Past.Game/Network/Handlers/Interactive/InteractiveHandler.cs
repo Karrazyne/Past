@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data.Types;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using Past.Common.Utils;
 using Past.Protocol.Messages;
 
@@ -22,87 +17,109 @@ namespace Past.Game.Network.Handlers.Interactive
 
         public static void HandleTeleportRequestMessage(Client client, TeleportRequestMessage message)
         {
-            var cellId = GetCellId(client, message.mapId);
+            var cellId = GetCellId(client, message.mapId, message.teleporterType);
+            
             client.Character.Teleport(message.mapId, cellId);
             client.Send(new LeaveDialogMessage());
         }
 
-        private static short GetCellId(Client client, int mapId)
+        private static short GetCellId(Client client, int mapId, sbyte teleporterType)
         {
             short cellId;
-
-            switch (mapId)
+            switch (teleporterType)
             {
-                case 2323:
-                case 139265:
-                    cellId = 314;
+                case 0: // Zaaps
+                    switch (mapId)
+                    {
+                        case 2323:
+                        case 139265:
+                            cellId = 314;
+                            break;
+                        case 800:
+                            cellId = 300;
+                            break;
+                        case 138543:
+                            cellId = 215;
+                            break;
+                        case 147768:
+                            cellId = 242;
+                            break;
+                        case 141588:
+                            cellId = 313;
+                            break;
+                        case 148744:
+                            cellId = 143;
+                            break;
+                        case 133896:
+                        case 2567:
+                            cellId = 235;
+                            break;
+                        case 1797:
+                            cellId = 287;
+                            break;
+                        case 3844:
+                            cellId = 254;
+                            break;
+                        case 132096:
+                            cellId = 206;
+                            break;
+                        case 131597:
+                            cellId = 355;
+                            break;
+                        case 5142:
+                            cellId = 467;
+                            break;
+                        case 131608:
+                            cellId = 381;
+                            break;
+                        case 17932:
+                            cellId = 116;
+                            break;
+                        case 13060:
+                            cellId = 173;
+                            break;
+                        case 12054:
+                            cellId = 329;
+                            break;
+                        case 8991:
+                            cellId = 228;
+                            break;
+                        case 13605:
+                            cellId = 227;
+                            break;
+                        case 15654:
+                            cellId = 259;
+                            break;
+                        case 15153:
+                            cellId = 327;
+                            break;
+                        case 143372:
+                            cellId = 257;
+                            break;
+                        case 144419:
+                            cellId = 216;
+                            break;
+                        case 154642:
+                            cellId = 271;
+                            break;
+                        default:
+                            cellId = client.Character.CellId;
+                            break;
+                    }
                     break;
-                case 800:
-                    cellId = 300;
-                    break;
-                case 138543:
-                    cellId = 215;
-                    break;
-                case 147768:
-                    cellId = 242;
-                    break;
-                case 141588:
-                    cellId = 313;
-                    break;
-                case 148744:
-                    cellId = 143;
-                    break;
-                case 133896:
-                case 2567:
-                    cellId = 235;
-                    break;
-                case 1797:
-                    cellId = 287;
-                    break;
-                case 3844:
-                    cellId = 254;
-                    break;
-                case 132096:
-                    cellId = 206;
-                    break;
-                case 131597:
-                    cellId = 355;
-                    break;
-                case 5142:
-                    cellId = 467;
-                    break;
-                case 131608:
-                    cellId = 381;
-                    break;
-                case 17932:
-                    cellId = 116;
-                    break;
-                case 13060:
-                    cellId = 173;
-                    break;
-                case 12054:
-                    cellId = 329;
-                    break;
-                case 8991:
-                    cellId = 228;
-                    break;
-                case 13605:
-                    cellId = 227;
-                    break;
-                case 15654:
-                    cellId = 259;
-                    break;
-                case 15153:
-                    cellId = 327;
-                    break;
-                case 143372:
-                    cellId = 257;
-                    break;
-                case 144419:
-                    cellId = 216;
-                    break;
-                case 154642:
-                    cellId = 271;
+                case 1: //Zaapis
+                    switch (mapId)
+                    {
+                        case 147767:
+                            cellId = 257;
+                            break;
+                        case 147768:
+                            cellId = 183;
+                            break;
+                        default:
+                            cellId = client.Character.CellId;
+                            break;
+                    }
                     break;
                 default:
                     cellId = client.Character.CellId;
@@ -201,6 +218,18 @@ namespace Past.Game.Network.Handlers.Interactive
                 466
             };
 
+            var ZaapisElemId = new List<int>()
+            {
+                448783,
+                450236
+            };
+
+            var ZaapisMapId = new List<int>()
+            {
+                147767, 
+                147768
+            };
+
             var ZaapCost = new List<short>();
 
             for(var i = 0; i < ZaapMapId.Count; i++)
@@ -209,6 +238,10 @@ namespace Past.Game.Network.Handlers.Interactive
             if (ZaapElemId.Contains(elemId))
             {
                 client.Send(new ZaapListMessage(0, ZaapMapId.ToArray(), ZaapSubAreaId.ToArray(), ZaapCost.ToArray(), 2323));
+            }
+            if (ZaapisElemId.Contains(elemId))
+            {
+                client.Send(new ZaapListMessage(1, ZaapisMapId.ToArray(), new short[] {513, 513}, new short[] {0,0}, 2323 ));
             }
         }
     }
