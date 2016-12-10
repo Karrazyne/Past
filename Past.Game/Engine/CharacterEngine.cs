@@ -434,6 +434,7 @@ namespace Past.Game.Engine
             CurrentMap.RemoveClient(Client);
             CurrentMapId = mapId;
             CellId = cellId;
+            Direction = (DirectionsEnum) 2;
             ContextHandler.SendCurrentMapMessage(Client, CurrentMapId);
         }
 

@@ -22,8 +22,94 @@ namespace Past.Game.Network.Handlers.Interactive
 
         public static void HandleTeleportRequestMessage(Client client, TeleportRequestMessage message)
         {
-            client.Character.Teleport(message.mapId, client.Character.CellId);
+            var cellId = GetCellId(client, message.mapId);
+            client.Character.Teleport(message.mapId, cellId);
             client.Send(new LeaveDialogMessage());
+        }
+
+        private static short GetCellId(Client client, int mapId)
+        {
+            short cellId;
+
+            switch (mapId)
+            {
+                case 2323:
+                case 139265:
+                    cellId = 314;
+                    break;
+                case 800:
+                    cellId = 300;
+                    break;
+                case 138543:
+                    cellId = 215;
+                    break;
+                case 147768:
+                    cellId = 242;
+                    break;
+                case 141588:
+                    cellId = 313;
+                    break;
+                case 148744:
+                    cellId = 143;
+                    break;
+                case 133896:
+                case 2567:
+                    cellId = 235;
+                    break;
+                case 1797:
+                    cellId = 287;
+                    break;
+                case 3844:
+                    cellId = 254;
+                    break;
+                case 132096:
+                    cellId = 206;
+                    break;
+                case 131597:
+                    cellId = 355;
+                    break;
+                case 5142:
+                    cellId = 467;
+                    break;
+                case 131608:
+                    cellId = 381;
+                    break;
+                case 17932:
+                    cellId = 116;
+                    break;
+                case 13060:
+                    cellId = 173;
+                    break;
+                case 12054:
+                    cellId = 329;
+                    break;
+                case 8991:
+                    cellId = 228;
+                    break;
+                case 13605:
+                    cellId = 227;
+                    break;
+                case 15654:
+                    cellId = 259;
+                    break;
+                case 15153:
+                    cellId = 327;
+                    break;
+                case 143372:
+                    cellId = 257;
+                    break;
+                case 144419:
+                    cellId = 216;
+                    break;
+                case 154642:
+                    cellId = 271;
+                    break;
+                default:
+                    cellId = client.Character.CellId;
+                    break;
+            }
+
+            return cellId;
         }
 
         public static void ParseInteractive(Client client, int elemId)

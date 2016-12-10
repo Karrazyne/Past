@@ -3,6 +3,7 @@ using Past.Protocol.Enums;
 using Past.Protocol.Messages;
 using System;
 using System.Linq;
+using Past.Common.Utils;
 
 namespace Past.Game.Network.Handlers.Context
 {
@@ -34,6 +35,7 @@ namespace Past.Game.Network.Handlers.Context
             {
                 client.Character.Direction = (DirectionsEnum)message.direction;
                 client.Character.CurrentMap.Send(new GameMapChangeOrientationMessage(client.Character.Id, message.direction));
+                client.Character.CurrentMap.Send(new GameContextRefreshEntityLookMessage(client.Character.Id, client.Character.EntityLook));
             }
         }
 
